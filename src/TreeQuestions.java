@@ -25,7 +25,8 @@ public class TreeQuestions {
      * 4        5       6       7
      */
     public void createSampleTree() {
-        root = new TreeNode(1, new TreeNode(2, new TreeNode(4, new TreeNode(9),null), new TreeNode(5,null, new TreeNode(11))), new TreeNode(3, new TreeNode(6,null,new TreeNode(8)), new TreeNode(7)));
+//        root = new TreeNode(1, new TreeNode(2, new TreeNode(4, null,null), new TreeNode(5,null, new TreeNode(11))), new TreeNode(3, new TreeNode(6,null,new TreeNode(8)), new TreeNode(7)));
+        root = new TreeNode(1, new TreeNode(2, new TreeNode(4, null,null), new TreeNode(5, new TreeNode(11),null)), new TreeNode(3, new TreeNode(6,new TreeNode(8),null), new TreeNode(7)));
     }
     public void levelOrderTraversal(TreeNode temp){
         if(temp == null) {
@@ -91,6 +92,32 @@ public class TreeQuestions {
         int rdepth = root.right!=null?minDepth(root.right):Integer.MAX_VALUE;
         return 1+ Math.min(ldepth,rdepth);
     }
+    int leftViewLevel =-1;
+    public void leftView(TreeNode root,int level){
+        if(root == null){
+            return;
+        }
+        if(level>leftViewLevel){
+            System.out.print(root.data+" ");
+            leftViewLevel = level;
+        }
+        if(root.left != null) {
+            leftView(root.left,level+1);
+        }
+        if(root.right != null) {
+            leftView(root.right,level+1);
+        }
+    }
+
+    public int sumLeftLeaves(TreeNode root,int sum,boolean flag){
+        if(root == null){
+            return 0;
+        }
+        if(root.right == null && root.left == null && flag){
+            return sum+root.data;
+        }
+        return sumLeftLeaves(root.left,sum,true)+sumLeftLeaves(root.right,sum,false);
+    }
 
     public static void main(String[] args) {
         TreeQuestions treeQuestions = new TreeQuestions();
@@ -102,6 +129,11 @@ public class TreeQuestions {
         treeQuestions.allPathToLeaf(treeQuestions.root);
         System.out.println();
         System.out.println(treeQuestions.minDepth(treeQuestions.root));
+        System.out.println();
+        treeQuestions.leftView(treeQuestions.root,0);
+        System.out.println();
+        System.out.println("Sum of left leaves");
+        System.out.println(treeQuestions.sumLeftLeaves(treeQuestions.root,0,false));
     }
 
 }

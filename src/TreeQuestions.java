@@ -13,6 +13,15 @@ public class TreeQuestions {
             this.right = right;
         }
 
+        @Override
+        public String toString() {
+            return "TreeNode{" +
+                    "data=" + data +
+                    ", left=" + left +
+                    ", right=" + right +
+                    '}';
+        }
+
         public TreeNode(int data) {
             this.data = data;
         }
@@ -26,7 +35,8 @@ public class TreeQuestions {
      */
     public void createSampleTree() {
 //        root = new TreeNode(1, new TreeNode(2, new TreeNode(4, null,null), new TreeNode(5,null, new TreeNode(11))), new TreeNode(3, new TreeNode(6,null,new TreeNode(8)), new TreeNode(7)));
-        root = new TreeNode(1, new TreeNode(2, new TreeNode(4, null,null), new TreeNode(5, new TreeNode(11),null)), new TreeNode(3, new TreeNode(6,new TreeNode(8),null), new TreeNode(7)));
+//        root = new TreeNode(1, new TreeNode(2, new TreeNode(4, null,null), new TreeNode(5, new TreeNode(11),null)), new TreeNode(3, new TreeNode(6,new TreeNode(8),null), new TreeNode(7)))
+            root = new TreeNode(1,new TreeNode(2),new TreeNode(3,new TreeNode(4,new TreeNode(6,null,new TreeNode(8)),null),new TreeNode(5,null,new TreeNode(7,new TreeNode(9,new TreeNode(10),null),null))));
     }
     public void levelOrderTraversal(TreeNode temp){
         if(temp == null) {
@@ -93,6 +103,7 @@ public class TreeQuestions {
         return 1+ Math.min(ldepth,rdepth);
     }
     int leftViewLevel =-1;
+
     public void leftView(TreeNode root,int level){
         if(root == null){
             return;
@@ -118,6 +129,22 @@ public class TreeQuestions {
         }
         return sumLeftLeaves(root.left,sum,true)+sumLeftLeaves(root.right,sum,false);
     }
+    int oddlevel =-1;
+    TreeNode oddnode;
+    public int deppestOddLevelLeaf(TreeNode root,int level){
+        if(root == null){
+            return oddlevel;
+        }
+        if(root.left ==null && root.right == null){
+            if(level %2 !=0){
+                oddlevel = level;
+                oddnode = root;
+            }
+        }
+        deppestOddLevelLeaf(root.left,level+1);
+        deppestOddLevelLeaf(root.right,level+1);
+        return oddlevel;
+    }
 
     public static void main(String[] args) {
         TreeQuestions treeQuestions = new TreeQuestions();
@@ -134,6 +161,9 @@ public class TreeQuestions {
         System.out.println();
         System.out.println("Sum of left leaves");
         System.out.println(treeQuestions.sumLeftLeaves(treeQuestions.root,0,false));
+        System.out.println("Deepest odd level node");
+        System.out.println(treeQuestions.deppestOddLevelLeaf(treeQuestions.root,1));
+        System.out.println("Node is"+ treeQuestions.oddnode.toString());
     }
 
 }
